@@ -1,5 +1,7 @@
 package com.gmail.zietkowski.filip.examplefoodbrowser;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  * @author Filip Ziętkowski.
  */
@@ -15,6 +17,8 @@ public class MainWindow extends javax.swing.JFrame {
         FoodListTable.removeColumn(FoodListTable.getColumnModel().getColumn(3));
         // We remove the column from the view, but it still stays in the model,
         // so we can access it in the food editor tab.
+        FoodListTable.setRowSelectionInterval(0, 0); // We select the first row
+        // by default.
     }
 
     /**
@@ -87,6 +91,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         FoodListTable.setName("foodListTable"); // NOI18N
+        FoodListTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         FoodListTableScrollPane.setViewportView(FoodListTable);
 
         FoodListPanel.add(FoodListTableScrollPane, java.awt.BorderLayout.CENTER);
@@ -107,6 +112,11 @@ public class MainWindow extends javax.swing.JFrame {
         DeleteFoodButton.setText("Delete food product");
         DeleteFoodButton.setToolTipText("Removes the selected food product from the list.");
         DeleteFoodButton.setName("deleteFoodButton"); // NOI18N
+        DeleteFoodButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteFoodButtonActionPerformed(evt);
+            }
+        });
         FoodListButtonsPanel.add(DeleteFoodButton);
 
         FoodListPanel.add(FoodListButtonsPanel, java.awt.BorderLayout.PAGE_END);
@@ -192,6 +202,13 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void DeleteFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFoodButtonActionPerformed
+        int selectedRow = FoodListTable.getSelectedRow();
+        if (selectedRow != -1) {
+            ((DefaultTableModel)FoodListTable.getModel()).removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_DeleteFoodButtonActionPerformed
 
     /**
      * The main method, launching the GUI.
