@@ -12,6 +12,9 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         FoodListTable.setAutoCreateRowSorter(true); // For some reason, the GUI
         // editor didn't want to set this properly, hence me setting it myself.
+        FoodListTable.removeColumn(FoodListTable.getColumnModel().getColumn(3));
+        // We remove the column from the view, but it still stays in the model,
+        // so we can access it in the food editor tab.
     }
 
     /**
@@ -58,17 +61,21 @@ public class MainWindow extends javax.swing.JFrame {
 
         FoodListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                { new Integer(1), "Cookie", "chomp chomp", "sweet"},
+                { new Integer(2), "Cake", "chomp chomp more", "sweet, huge"},
+                { new Integer(3), "Water", "H20", "drink"},
+                { new Integer(4), "beef steak", "bos taurus taurus", "source beef"},
+                { new Integer(5), "pork steak", "sus scrofa f. domestica", "source pork"}
             },
             new String [] {
-                "ID", "Name", "Scientific name"
+                "ID", "Name", "Scientific name", "Tags"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
