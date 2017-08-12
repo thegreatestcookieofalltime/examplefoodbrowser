@@ -275,7 +275,8 @@ public class MainWindow extends javax.swing.JFrame {
         int selectedRowIndex = FoodListTable.getSelectedRow();
         if (selectedRowIndex != -1) {
             ((DefaultTableModel)FoodListTable.getModel())
-                    .removeRow(selectedRowIndex);
+                    .removeRow(FoodListTable.getRowSorter()
+                            .convertRowIndexToModel(selectedRowIndex));
             if (FoodListTable.getRowCount() == 0) {
                 FoodProductIDTextField.setText("");
                 FoodProductNameTextField.setText("");
