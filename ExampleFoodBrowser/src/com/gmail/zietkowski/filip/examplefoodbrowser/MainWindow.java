@@ -90,10 +90,7 @@ public class MainWindow extends javax.swing.JFrame {
             // first row, because if we fake the selection of the first row, it
             // doesn't fire the list selection event.
         } else {
-            FoodProductIDSpinner.setEnabled(false);
-            FoodProductNameTextField.setEnabled(false);
-            FoodProductScientificNameTextField.setEnabled(false);
-            FoodProductTagsList.setEnabled(false);
+            disableEditorGUI();
         }
         ChangeListener spinnerChangeListener = (ChangeEvent evt) -> {
             if (FoodListTable.getRowCount() > 0) {
@@ -341,14 +338,11 @@ public class MainWindow extends javax.swing.JFrame {
                     .removeRow(FoodListTable.getRowSorter()
                             .convertRowIndexToModel(selectedRowIndex));
             if (FoodListTable.getRowCount() < 1) {
+                disableEditorGUI();
                 FoodProductIDSpinner.setValue(0);
-                FoodProductIDSpinner.setEnabled(false);
                 FoodProductNameTextField.setText("");
-                FoodProductNameTextField.setEnabled(false);
                 FoodProductScientificNameTextField.setText("");
-                FoodProductScientificNameTextField.setEnabled(false);
                 FoodProductTagsList.clearSelection();
-                FoodProductTagsList.setEnabled(false);
             } else {
                 FoodListTable.changeSelection(0, 0, false, false);
                 loadEditorEntry(FoodListTable.getRowSorter()
@@ -381,10 +375,7 @@ public class MainWindow extends javax.swing.JFrame {
                                       false, false);
         loadEditorEntry(newRowIndex);
         if (newRowIndex < 1) {
-            FoodProductIDSpinner.setEnabled(true);
-            FoodProductNameTextField.setEnabled(true);
-            FoodProductScientificNameTextField.setEnabled(true);
-            FoodProductTagsList.setEnabled(true);
+            enableEditorGUI();
         }
         MainTabbedPane.setSelectedComponent(FoodEditPanel);
     }//GEN-LAST:event_NewFoodButtonActionPerformed
@@ -452,6 +443,26 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         }
+    }
+    
+    /**
+     * Enables the editor GUI.
+     */
+    private void enableEditorGUI() {
+        FoodProductIDSpinner.setEnabled(true);
+        FoodProductNameTextField.setEnabled(true);
+        FoodProductScientificNameTextField.setEnabled(true);
+        FoodProductTagsList.setEnabled(true);
+    }
+    
+    /**
+     * Disables the editor GUI.
+     */
+    private void disableEditorGUI() {
+        FoodProductIDSpinner.setEnabled(false);
+        FoodProductNameTextField.setEnabled(false);
+        FoodProductScientificNameTextField.setEnabled(false);
+        FoodProductTagsList.setEnabled(false);
     }
     
     /**
