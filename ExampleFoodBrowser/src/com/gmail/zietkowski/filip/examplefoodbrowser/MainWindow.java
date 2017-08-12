@@ -63,7 +63,7 @@ public class MainWindow extends javax.swing.JFrame {
         // editor didn't want to set this properly, hence me setting it myself.
         FoodListTable.removeColumn(FoodListTable.getColumnModel().getColumn(3));
         // We remove the column from the view, but it still stays in the model,
-        // so we can access it in the food editor tab.
+        // so we can access it from the food editor tab.
         FoodListTable.getSelectionModel().addListSelectionListener(
                 new FoodListSelectionHandler());
         FoodListTable.changeSelection(0, 0, false, false); // We select the
