@@ -3,6 +3,8 @@ package com.gmail.zietkowski.filip.examplefoodbrowser;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -71,6 +73,15 @@ public class MainWindow extends javax.swing.JFrame {
         loadEditorEntry(0); // We manually load the editor entry for the first
         // row, because if we fake the selection of the first row, it doesn't
         // fire the list selection event.
+        ChangeListener spinnerChangeListener = (ChangeEvent evt) -> {
+            FoodListTable.setValueAt((Integer)FoodProductIDSpinner.getValue(),
+                    FoodListTable.getSelectedRow(),
+                    FOOD_ID_COLUMN_NUMBER);
+        }; // The Spinner implementation is a bit broken, so we have to use
+        // this workaround (the problem was that it doesn't fire the focus
+        // lost event by default and solutions to this problem are much more
+        // of a hassle than just doing this).
+        FoodProductIDSpinner.addChangeListener(spinnerChangeListener);
     }
 
     /**
@@ -192,6 +203,7 @@ public class MainWindow extends javax.swing.JFrame {
         FoodProductIDFormattedTextFieldLabel.setToolTipText("");
         FoodProductIDFormattedTextFieldLabel.setName("foodProductIDFormattedTextFieldLabel"); // NOI18N
 
+        FoodProductIDSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         FoodProductIDSpinner.setName("foodProductIDSpinner"); // NOI18N
 
         FoodProductNameTextFieldLabel.setLabelFor(FoodProductNameTextField);
@@ -210,9 +222,9 @@ public class MainWindow extends javax.swing.JFrame {
         FoodProductScientificNameTextFieldLabel.setName("foodProductScientificNameTextFieldLabel"); // NOI18N
 
         FoodProductScientificNameTextField.setName("foodProductScientificNameTextField"); // NOI18N
-        FoodProductScientificNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                FoodProductScientificNameTextFieldKeyTyped(evt);
+        FoodProductScientificNameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                FoodProductScientificNameTextFieldFocusLost(evt);
             }
         });
 
@@ -281,6 +293,11 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * The delete food button click handler.
+     * 
+     * @param evt The click event.
+     */
     private void DeleteFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFoodButtonActionPerformed
         int selectedRowIndex = FoodListTable.getSelectedRow();
         if (selectedRowIndex != -1) {
@@ -300,10 +317,20 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_DeleteFoodButtonActionPerformed
 
+    /**
+     * The edit food button click handler.
+     * 
+     * @param evt The click event.
+     */
     private void EditFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditFoodButtonActionPerformed
         MainTabbedPane.setSelectedComponent(FoodEditPanel);
     }//GEN-LAST:event_EditFoodButtonActionPerformed
 
+    /**
+     * The new food button click handler.
+     * 
+     * @param evt The click event.
+     */
     private void NewFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFoodButtonActionPerformed
         int newRowIndex = FoodListTable.getRowCount();
         ((DefaultTableModel)FoodListTable.getModel()).addRow(
@@ -316,16 +343,26 @@ public class MainWindow extends javax.swing.JFrame {
         MainTabbedPane.setSelectedComponent(FoodEditPanel);
     }//GEN-LAST:event_NewFoodButtonActionPerformed
 
-    private void FoodProductScientificNameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FoodProductScientificNameTextFieldKeyTyped
-        FoodListTable.setValueAt(FoodProductScientificNameTextField.getText(),
-                FoodListTable.getSelectedRow(),
-                FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER);
-    }//GEN-LAST:event_FoodProductScientificNameTextFieldKeyTyped
-
+    /**
+     * The food name post-edit handler.
+     * 
+     * @param evt The focus lost event.
+     */
     private void FoodProductNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductNameTextFieldFocusLost
         FoodListTable.setValueAt(FoodProductNameTextField.getText(),
                 FoodListTable.getSelectedRow(), FOOD_NAME_COLUMN_NUMBER);
     }//GEN-LAST:event_FoodProductNameTextFieldFocusLost
+
+    /**
+     * The food scientific name post-edit handler.
+     * 
+     * @param evt The focus lost event.
+     */
+    private void FoodProductScientificNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductScientificNameTextFieldFocusLost
+        FoodListTable.setValueAt(FoodProductScientificNameTextField.getText(),
+                FoodListTable.getSelectedRow(),
+                FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER);
+    }//GEN-LAST:event_FoodProductScientificNameTextFieldFocusLost
 
     /**
      * Loads an entry to the editor tab.
