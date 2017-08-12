@@ -138,7 +138,6 @@ public class MainWindow extends javax.swing.JFrame {
         setResizable(false);
 
         MainTabbedPane.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
-        MainTabbedPane.setToolTipText("Tabs switcher with food list and food editor tabs.");
         MainTabbedPane.setName("mainTabbedPane"); // NOI18N
 
         FoodListPanel.setName("FoodListPanel"); // NOI18N
