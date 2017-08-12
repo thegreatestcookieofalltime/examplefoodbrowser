@@ -251,7 +251,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Food product ID:"/>
               </AccessibilityProperties>
               <Events>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="FoodProductIDFormattedTextFieldKeyTyped"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="FoodProductIDFormattedTextFieldFocusLost"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="FoodProductNameTextFieldLabel">
@@ -268,7 +268,7 @@
                 <Property name="name" type="java.lang.String" value="foodProductNameTextField" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="FoodProductNameTextFieldKeyTyped"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="FoodProductNameTextFieldFocusLost"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="FoodProductScientificNameTextFieldLabel">

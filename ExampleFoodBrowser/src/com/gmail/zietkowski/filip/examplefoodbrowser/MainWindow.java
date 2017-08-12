@@ -197,9 +197,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         FoodProductIDFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
         FoodProductIDFormattedTextField.setName("foodProductIDFormattedTextField"); // NOI18N
-        FoodProductIDFormattedTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                FoodProductIDFormattedTextFieldKeyTyped(evt);
+        FoodProductIDFormattedTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                FoodProductIDFormattedTextFieldFocusLost(evt);
             }
         });
 
@@ -208,9 +208,9 @@ public class MainWindow extends javax.swing.JFrame {
         FoodProductNameTextFieldLabel.setName("foodProductNameTextFieldLabel"); // NOI18N
 
         FoodProductNameTextField.setName("foodProductNameTextField"); // NOI18N
-        FoodProductNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                FoodProductNameTextFieldKeyTyped(evt);
+        FoodProductNameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                FoodProductNameTextFieldFocusLost(evt);
             }
         });
 
@@ -319,6 +319,9 @@ public class MainWindow extends javax.swing.JFrame {
         int newRowIndex = FoodListTable.getRowCount();
         ((DefaultTableModel)FoodListTable.getModel()).addRow(
                 new Vector(Arrays.asList(new Object[]{0, "", "", ""})));
+        FoodProductIDFormattedTextField.setValue(0); // Fixes the
+        // JFormattedTextField issue of keeping the "-" if the previous ID was
+        // negative (which may cause "-0" to appear).
         int newRowViewIndex = FoodListTable.getRowSorter()
                 .convertRowIndexToView(newRowIndex);
         FoodListTable.changeSelection(newRowViewIndex, newRowViewIndex,
@@ -327,21 +330,22 @@ public class MainWindow extends javax.swing.JFrame {
         MainTabbedPane.setSelectedComponent(FoodEditPanel);
     }//GEN-LAST:event_NewFoodButtonActionPerformed
 
-    private void FoodProductNameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FoodProductNameTextFieldKeyTyped
-        FoodListTable.setValueAt(FoodProductNameTextField.getText(),
-                FoodListTable.getSelectedRow(), FOOD_NAME_COLUMN_NUMBER);
-    }//GEN-LAST:event_FoodProductNameTextFieldKeyTyped
-
     private void FoodProductScientificNameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FoodProductScientificNameTextFieldKeyTyped
         FoodListTable.setValueAt(FoodProductScientificNameTextField.getText(),
                 FoodListTable.getSelectedRow(),
                 FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER);
     }//GEN-LAST:event_FoodProductScientificNameTextFieldKeyTyped
 
-    private void FoodProductIDFormattedTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FoodProductIDFormattedTextFieldKeyTyped
-        FoodListTable.setValueAt(FoodProductIDFormattedTextField.getText(),
+    private void FoodProductIDFormattedTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductIDFormattedTextFieldFocusLost
+        FoodListTable.setValueAt(
+                Integer.parseInt(FoodProductIDFormattedTextField.getText()),
                 FoodListTable.getSelectedRow(), FOOD_ID_COLUMN_NUMBER);
-    }//GEN-LAST:event_FoodProductIDFormattedTextFieldKeyTyped
+    }//GEN-LAST:event_FoodProductIDFormattedTextFieldFocusLost
+
+    private void FoodProductNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductNameTextFieldFocusLost
+        FoodListTable.setValueAt(FoodProductNameTextField.getText(),
+                FoodListTable.getSelectedRow(), FOOD_NAME_COLUMN_NUMBER);
+    }//GEN-LAST:event_FoodProductNameTextFieldFocusLost
 
     /**
      * Loads an entry to the editor tab.
