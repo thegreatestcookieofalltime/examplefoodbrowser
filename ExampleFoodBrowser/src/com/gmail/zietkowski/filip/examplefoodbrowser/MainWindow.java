@@ -89,9 +89,13 @@ public class MainWindow extends javax.swing.JFrame {
         // row, because if we fake the selection of the first row, it doesn't
         // fire the list selection event.
         ChangeListener spinnerChangeListener = (ChangeEvent evt) -> {
-            FoodListTable.setValueAt((Integer)FoodProductIDSpinner.getValue(),
-                    FoodListTable.getSelectedRow(),
-                    FOOD_ID_COLUMN_NUMBER);
+            if (FoodListTable.getRowCount() > 0) {
+                FoodListTable.getModel().setValueAt(
+                        (Integer)FoodProductIDSpinner.getValue(),
+                        FoodListTable.getRowSorter()
+                        .convertRowIndexToModel(FoodListTable.getSelectedRow()),
+                        FOOD_ID_COLUMN_NUMBER);
+            }
         }; // The Spinner implementation is a bit broken, so we have to use
         // this workaround (the problem was that it doesn't fire the focus
         // lost event by default and solutions to this problem are much more
@@ -255,6 +259,11 @@ public class MainWindow extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         FoodProductTagsList.setName("foodProductTagsList"); // NOI18N
+        FoodProductTagsList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                FoodProductTagsListFocusLost(evt);
+            }
+        });
         FoodProductTagsListScrollPane.setViewportView(FoodProductTagsList);
 
         javax.swing.GroupLayout FoodEditPanelLayout = new javax.swing.GroupLayout(FoodEditPanel);
@@ -319,11 +328,15 @@ public class MainWindow extends javax.swing.JFrame {
             ((DefaultTableModel)FoodListTable.getModel())
                     .removeRow(FoodListTable.getRowSorter()
                             .convertRowIndexToModel(selectedRowIndex));
-            if (FoodListTable.getRowCount() == 0) {
+            if (FoodListTable.getRowCount() < 1) {
                 FoodProductIDSpinner.setValue(0);
+                FoodProductIDSpinner.setEnabled(false);
                 FoodProductNameTextField.setText("");
+                FoodProductNameTextField.setEnabled(false);
                 FoodProductScientificNameTextField.setText("");
+                FoodProductScientificNameTextField.setEnabled(false);
                 FoodProductTagsList.clearSelection();
+                FoodProductTagsList.setEnabled(false);
             } else {
                 FoodListTable.changeSelection(0, 0, false, false);
                 loadEditorEntry(FoodListTable.getRowSorter()
@@ -355,6 +368,12 @@ public class MainWindow extends javax.swing.JFrame {
         FoodListTable.changeSelection(newRowViewIndex, newRowViewIndex,
                                       false, false);
         loadEditorEntry(newRowIndex);
+        if (newRowIndex < 1) {
+            FoodProductIDSpinner.setEnabled(true);
+            FoodProductNameTextField.setEnabled(true);
+            FoodProductScientificNameTextField.setEnabled(true);
+            FoodProductTagsList.setEnabled(true);
+        }
         MainTabbedPane.setSelectedComponent(FoodEditPanel);
     }//GEN-LAST:event_NewFoodButtonActionPerformed
 
@@ -364,8 +383,10 @@ public class MainWindow extends javax.swing.JFrame {
      * @param evt The focus lost event.
      */
     private void FoodProductNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductNameTextFieldFocusLost
-        FoodListTable.setValueAt(FoodProductNameTextField.getText(),
-                FoodListTable.getSelectedRow(), FOOD_NAME_COLUMN_NUMBER);
+        FoodListTable.getModel().setValueAt(FoodProductNameTextField.getText(),
+                FoodListTable.getRowSorter().convertRowIndexToModel(
+                        FoodListTable.getSelectedRow())
+                , FOOD_NAME_COLUMN_NUMBER);
     }//GEN-LAST:event_FoodProductNameTextFieldFocusLost
 
     /**
@@ -374,10 +395,25 @@ public class MainWindow extends javax.swing.JFrame {
      * @param evt The focus lost event.
      */
     private void FoodProductScientificNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductScientificNameTextFieldFocusLost
-        FoodListTable.setValueAt(FoodProductScientificNameTextField.getText(),
-                FoodListTable.getSelectedRow(),
+        FoodListTable.getModel().setValueAt(
+                FoodProductScientificNameTextField.getText(),
+                FoodListTable.getRowSorter().convertRowIndexToModel(
+                        FoodListTable.getSelectedRow()),
                 FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER);
     }//GEN-LAST:event_FoodProductScientificNameTextFieldFocusLost
+
+    /**
+     * The food tags post-edit handler.
+     * 
+     * @param evt The focus lost event.
+     */
+    private void FoodProductTagsListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductTagsListFocusLost
+        FoodListTable.getModel().setValueAt(
+                String.join(",", FoodProductTagsList.getSelectedValuesList()),
+                FoodListTable.getRowSorter().convertRowIndexToModel(
+                        FoodListTable.getSelectedRow()),
+                FOOD_TAGS_COLUMN_NUMBER);
+    }//GEN-LAST:event_FoodProductTagsListFocusLost
 
     /**
      * Loads an entry to the editor tab.
