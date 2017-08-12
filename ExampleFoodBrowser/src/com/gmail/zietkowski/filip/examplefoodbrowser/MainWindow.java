@@ -297,7 +297,10 @@ public class MainWindow extends javax.swing.JFrame {
         int newRowIndex = FoodListTable.getRowCount();
         ((DefaultTableModel)FoodListTable.getModel()).addRow(
                 new Vector(Arrays.asList(new Object[]{null, "", "", ""})));
-        FoodListTable.changeSelection(newRowIndex, newRowIndex, false, false);
+        int newRowViewIndex = FoodListTable.getRowSorter()
+                .convertRowIndexToView(newRowIndex);
+        FoodListTable.changeSelection(newRowViewIndex, newRowViewIndex,
+                                      false, false);
         loadEditorEntry(newRowIndex);
     }//GEN-LAST:event_NewFoodButtonActionPerformed
 
