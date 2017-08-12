@@ -185,16 +185,16 @@
                           <Component id="FoodProductTagsListScrollPane" min="-2" pref="551" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="FoodProductIDTextFieldLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="FoodProductIDFormattedTextFieldLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="FoodProductNameTextFieldLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="FoodProductsTagsListLabel" min="-2" max="-2" attributes="0"/>
                                   <Component id="FoodProductScientificNameTextFieldLabel" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="FoodProductScientificNameTextField" alignment="0" min="-2" pref="261" max="-2" attributes="0"/>
-                                  <Component id="FoodProductIDTextField" alignment="0" min="-2" pref="261" max="-2" attributes="0"/>
-                                  <Component id="FoodProductNameTextField" alignment="0" min="-2" pref="261" max="-2" attributes="0"/>
+                                  <Component id="FoodProductScientificNameTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="FoodProductNameTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="FoodProductIDFormattedTextField" alignment="0" pref="261" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -207,8 +207,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="FoodProductIDTextFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="FoodProductIDTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="FoodProductIDFormattedTextFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="FoodProductIDFormattedTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -230,20 +230,29 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="FoodProductIDTextFieldLabel">
+            <Component class="javax.swing.JLabel" name="FoodProductIDFormattedTextFieldLabel">
               <Properties>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="FoodProductIDTextField"/>
+                  <ComponentRef name="FoodProductIDFormattedTextField"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Food product ID:"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
-                <Property name="name" type="java.lang.String" value="foodProductIDTextFieldLabel" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="foodProductIDFormattedTextFieldLabel" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="FoodProductIDTextField">
+            <Component class="javax.swing.JFormattedTextField" name="FoodProductIDFormattedTextField">
               <Properties>
-                <Property name="name" type="java.lang.String" value="foodProductIDTextField" noResource="true"/>
+                <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+                  <Format format="#" subtype="-1" type="0"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="foodProductIDFormattedTextField" noResource="true"/>
               </Properties>
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Food product ID:"/>
+              </AccessibilityProperties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="FoodProductIDFormattedTextFieldKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="FoodProductNameTextFieldLabel">
               <Properties>
@@ -258,6 +267,9 @@
               <Properties>
                 <Property name="name" type="java.lang.String" value="foodProductNameTextField" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="FoodProductNameTextFieldKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="FoodProductScientificNameTextFieldLabel">
               <Properties>
@@ -272,6 +284,9 @@
               <Properties>
                 <Property name="name" type="java.lang.String" value="foodProductScientificNameTextField" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="FoodProductScientificNameTextFieldKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="FoodProductsTagsListLabel">
               <Properties>
