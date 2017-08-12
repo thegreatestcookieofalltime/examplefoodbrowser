@@ -51,9 +51,24 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * The food ID column number.
+     */
     public static final int FOOD_ID_COLUMN_NUMBER = 0;
+    
+    /**
+     * The food name column number.
+     */
     public static final int FOOD_NAME_COLUMN_NUMBER = 1;
+    
+    /**
+     * The food scientific name column number.
+     */
     public static final int FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER = 2;
+    
+    /**
+     * The food tags column number.
+     */
     public static final int FOOD_TAGS_COLUMN_NUMBER = 3;
 
     /**
