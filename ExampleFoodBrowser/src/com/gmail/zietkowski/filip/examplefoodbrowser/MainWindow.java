@@ -283,7 +283,8 @@ public class MainWindow extends javax.swing.JFrame {
                 FoodProductTagsList.clearSelection();
             } else {
                 FoodListTable.changeSelection(0, 0, false, false);
-                loadEditorEntry(0);
+                loadEditorEntry(FoodListTable.getRowSorter()
+                        .convertRowIndexToModel(0));
             }
         }
     }//GEN-LAST:event_DeleteFoodButtonActionPerformed
