@@ -1,11 +1,25 @@
 package com.gmail.zietkowski.filip.examplefoodbrowser;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Filip Ziętkowski.
  */
 public class MainWindow extends javax.swing.JFrame {
+    /**
+     * The list selection handler class.
+     */
+    class ListSelectionHandler implements ListSelectionListener {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void valueChanged(ListSelectionEvent lSE) {
+            
+        }
+    }
 
     /**
      * Creates the form.
