@@ -83,11 +83,18 @@ public class MainWindow extends javax.swing.JFrame {
         // so we can access it from the food editor tab.
         FoodListTable.getSelectionModel().addListSelectionListener(
                 new FoodListSelectionHandler());
-        FoodListTable.changeSelection(0, 0, false, false); // We select the
-        // first row by default.
-        loadEditorEntry(0); // We manually load the editor entry for the first
-        // row, because if we fake the selection of the first row, it doesn't
-        // fire the list selection event.
+        if (FoodListTable.getRowCount() > 0) {
+            FoodListTable.changeSelection(0, 0, false, false); // We select the
+            // first row by default.
+            loadEditorEntry(0); // We manually load the editor entry for the
+            // first row, because if we fake the selection of the first row, it
+            // doesn't fire the list selection event.
+        } else {
+            FoodProductIDSpinner.setEnabled(false);
+            FoodProductNameTextField.setEnabled(false);
+            FoodProductScientificNameTextField.setEnabled(false);
+            FoodProductTagsList.setEnabled(false);
+        }
         ChangeListener spinnerChangeListener = (ChangeEvent evt) -> {
             if (FoodListTable.getRowCount() > 0) {
                 FoodListTable.getModel().setValueAt(
