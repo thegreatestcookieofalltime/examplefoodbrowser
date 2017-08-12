@@ -6,7 +6,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.NumberFormatter;
 
 /**
  * @author Filip Ziętkowski.
@@ -72,8 +71,6 @@ public class MainWindow extends javax.swing.JFrame {
         loadEditorEntry(0); // We manually load the editor entry for the first
         // row, because if we fake the selection of the first row, it doesn't
         // fire the list selection event.
-        ((NumberFormatter)FoodProductIDFormattedTextField.getFormatter())
-                .setAllowsInvalid(false);
     }
 
     /**
@@ -95,7 +92,7 @@ public class MainWindow extends javax.swing.JFrame {
         DeleteFoodButton = new javax.swing.JButton();
         FoodEditPanel = new javax.swing.JPanel();
         FoodProductIDFormattedTextFieldLabel = new javax.swing.JLabel();
-        FoodProductIDFormattedTextField = new javax.swing.JFormattedTextField();
+        FoodProductIDSpinner = new javax.swing.JSpinner();
         FoodProductNameTextFieldLabel = new javax.swing.JLabel();
         FoodProductNameTextField = new javax.swing.JTextField();
         FoodProductScientificNameTextFieldLabel = new javax.swing.JLabel();
@@ -190,18 +187,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         FoodEditPanel.setName("FoodEditPanel"); // NOI18N
 
-        FoodProductIDFormattedTextFieldLabel.setLabelFor(FoodProductIDFormattedTextField);
+        FoodProductIDFormattedTextFieldLabel.setLabelFor(FoodProductIDSpinner);
         FoodProductIDFormattedTextFieldLabel.setText("Food product ID:");
         FoodProductIDFormattedTextFieldLabel.setToolTipText("");
         FoodProductIDFormattedTextFieldLabel.setName("foodProductIDFormattedTextFieldLabel"); // NOI18N
 
-        FoodProductIDFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
-        FoodProductIDFormattedTextField.setName("foodProductIDFormattedTextField"); // NOI18N
-        FoodProductIDFormattedTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                FoodProductIDFormattedTextFieldFocusLost(evt);
-            }
-        });
+        FoodProductIDSpinner.setName("foodProductIDSpinner"); // NOI18N
 
         FoodProductNameTextFieldLabel.setLabelFor(FoodProductNameTextField);
         FoodProductNameTextFieldLabel.setText("Food product name:");
@@ -255,9 +246,9 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(FoodProductScientificNameTextFieldLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(FoodEditPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(FoodProductScientificNameTextField)
-                            .addComponent(FoodProductNameTextField)
-                            .addComponent(FoodProductIDFormattedTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))))
+                            .addComponent(FoodProductNameTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(FoodProductIDSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                            .addComponent(FoodProductScientificNameTextField))))
                 .addGap(35, 35, 35))
         );
         FoodEditPanelLayout.setVerticalGroup(
@@ -266,7 +257,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(FoodEditPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FoodProductIDFormattedTextFieldLabel)
-                    .addComponent(FoodProductIDFormattedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FoodProductIDSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addGroup(FoodEditPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FoodProductNameTextFieldLabel)
@@ -281,8 +272,6 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(FoodProductTagsListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
-
-        FoodProductIDFormattedTextField.getAccessibleContext().setAccessibleName("Food product ID:");
 
         MainTabbedPane.addTab("Food editor", null, FoodEditPanel, "The editor, used for creating or editing entries from the food list.");
 
@@ -299,7 +288,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .removeRow(FoodListTable.getRowSorter()
                             .convertRowIndexToModel(selectedRowIndex));
             if (FoodListTable.getRowCount() == 0) {
-                FoodProductIDFormattedTextField.setText("0");
+                FoodProductIDSpinner.setValue(0);
                 FoodProductNameTextField.setText("");
                 FoodProductScientificNameTextField.setText("");
                 FoodProductTagsList.clearSelection();
@@ -319,9 +308,6 @@ public class MainWindow extends javax.swing.JFrame {
         int newRowIndex = FoodListTable.getRowCount();
         ((DefaultTableModel)FoodListTable.getModel()).addRow(
                 new Vector(Arrays.asList(new Object[]{0, "", "", ""})));
-        FoodProductIDFormattedTextField.setValue(0); // Fixes the
-        // JFormattedTextField issue of keeping the "-" if the previous ID was
-        // negative (which may cause "-0" to appear).
         int newRowViewIndex = FoodListTable.getRowSorter()
                 .convertRowIndexToView(newRowIndex);
         FoodListTable.changeSelection(newRowViewIndex, newRowViewIndex,
@@ -335,12 +321,6 @@ public class MainWindow extends javax.swing.JFrame {
                 FoodListTable.getSelectedRow(),
                 FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER);
     }//GEN-LAST:event_FoodProductScientificNameTextFieldKeyTyped
-
-    private void FoodProductIDFormattedTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductIDFormattedTextFieldFocusLost
-        FoodListTable.setValueAt(
-                Integer.parseInt(FoodProductIDFormattedTextField.getText()),
-                FoodListTable.getSelectedRow(), FOOD_ID_COLUMN_NUMBER);
-    }//GEN-LAST:event_FoodProductIDFormattedTextFieldFocusLost
 
     private void FoodProductNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_FoodProductNameTextFieldFocusLost
         FoodListTable.setValueAt(FoodProductNameTextField.getText(),
@@ -357,9 +337,7 @@ public class MainWindow extends javax.swing.JFrame {
                 FoodListTable.getModel()).getDataVector()
                 .elementAt(selectionIndex);
         Object foodID = selectedRow.elementAt(FOOD_ID_COLUMN_NUMBER);
-        FoodProductIDFormattedTextField.setText(foodID == null
-                                       ? ""
-                                       : Integer.toString((Integer)foodID));
+        FoodProductIDSpinner.setValue(foodID == null ? 0 : (Integer)foodID);
         FoodProductNameTextField.setText((String)selectedRow
                 .elementAt(FOOD_NAME_COLUMN_NUMBER));
         FoodProductScientificNameTextField.setText((String)selectedRow
@@ -411,8 +389,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel FoodListPanel;
     private javax.swing.JTable FoodListTable;
     private javax.swing.JScrollPane FoodListTableScrollPane;
-    private javax.swing.JFormattedTextField FoodProductIDFormattedTextField;
     private javax.swing.JLabel FoodProductIDFormattedTextFieldLabel;
+    private javax.swing.JSpinner FoodProductIDSpinner;
     private javax.swing.JTextField FoodProductNameTextField;
     private javax.swing.JLabel FoodProductNameTextFieldLabel;
     private javax.swing.JTextField FoodProductScientificNameTextField;
