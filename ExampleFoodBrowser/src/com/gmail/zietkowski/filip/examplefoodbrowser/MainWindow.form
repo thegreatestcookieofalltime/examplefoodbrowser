@@ -99,7 +99,7 @@
                         </Column>
                         <Column editable="false" title="Tags" type="java.lang.String">
                           <Data value="sweet"/>
-                          <Data value="sweet, huge"/>
+                          <Data value="sweet,huge"/>
                           <Data value="drink"/>
                           <Data value="source beef"/>
                           <Data value="source pork"/>
@@ -135,6 +135,9 @@
                     <Property name="toolTipText" type="java.lang.String" value="Opens the food editor tab with a new food product."/>
                     <Property name="name" type="java.lang.String" value="newFoodButton" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewFoodButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="EditFoodButton">
                   <Properties>
@@ -142,6 +145,9 @@
                     <Property name="toolTipText" type="java.lang.String" value="Opens the food editor tab with the selected food product."/>
                     <Property name="name" type="java.lang.String" value="editFoodButton" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditFoodButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="DeleteFoodButton">
                   <Properties>
@@ -229,7 +235,8 @@
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
                   <ComponentRef name="FoodProductIDTextField"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Food procut ID:"/>
+                <Property name="text" type="java.lang.String" value="Food product ID:"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="name" type="java.lang.String" value="foodProductIDTextFieldLabel" noResource="true"/>
               </Properties>
             </Component>
@@ -288,7 +295,14 @@
                 <Component class="javax.swing.JList" name="FoodProductTagsList">
                   <Properties>
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                      <StringArray count="0"/>
+                      <StringArray count="6">
+                        <StringItem index="0" value="sweet"/>
+                        <StringItem index="1" value="huge"/>
+                        <StringItem index="2" value="drink"/>
+                        <StringItem index="3" value="source beef"/>
+                        <StringItem index="4" value="source pork"/>
+                        <StringItem index="5" value="sour"/>
+                      </StringArray>
                     </Property>
                     <Property name="name" type="java.lang.String" value="foodProductTagsList" noResource="true"/>
                   </Properties>

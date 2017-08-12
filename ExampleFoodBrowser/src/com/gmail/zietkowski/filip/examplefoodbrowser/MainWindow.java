@@ -1,5 +1,7 @@
 package com.gmail.zietkowski.filip.examplefoodbrowser;
 
+import java.util.Arrays;
+import java.util.Vector;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -10,19 +12,47 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainWindow extends javax.swing.JFrame {
     /**
-     * The list selection handler class.
+     * The food list selection handler class.
      */
     class FoodListSelectionHandler implements ListSelectionListener {
         /**
          * {@inheritDoc}
          */
         @Override
-        public void valueChanged(ListSelectionEvent lSE) {
-            ListSelectionModel listSelectionModel = (ListSelectionModel)lSE
-                                                    .getSource();
-            
+        public void valueChanged(ListSelectionEvent listSelectionEvent) {
+            if (!listSelectionEvent.getValueIsAdjusting()) {
+                return; // We skip non-final events, including deselection ones.
+            }
+            ListSelectionModel listSelectionModel = (ListSelectionModel)
+                    listSelectionEvent.getSource();
+            // I pesonally dislike the 80 line width limit because of stuff like
+            // above, but I use it if I'm required too. I forgot to ask about
+            // the code style requirements, so I'll obey the default Java rules
+            // which recommend it (probably because it helps with merging).
+            if (listSelectionModel.isSelectionEmpty()) {
+                return;
+            }
+            loadEditorEntry(FoodListTable.getRowSorter()
+                    .convertRowIndexToModel(FoodListTable.getSelectedRow()));
+            // In theory the below is more universal, but in our case the above
+            // does what we need in a more convenient way. If anybody will ever
+            // need to handle multiple selection in this table, the commented 
+            // out code below can do it.
+//            for (int i = listSelectionEvent.getFirstIndex();
+//                 i <= listSelectionEvent.getLastIndex(); i++) {
+//                if (listSelectionModel.isSelectedIndex(i)) {
+//                    loadEditorEntry(FoodListTable.getRowSorter()
+//                            .convertRowIndexToModel(i));
+//                    return;
+//                }
+//            }
         }
     }
+    
+    public static final int FOOD_ID_COLUMN_NUMBER = 0;
+    public static final int FOOD_NAME_COLUMN_NUMBER = 1;
+    public static final int FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER = 2;
+    public static final int FOOD_TAGS_COLUMN_NUMBER = 3;
 
     /**
      * Creates the form.
@@ -34,8 +64,13 @@ public class MainWindow extends javax.swing.JFrame {
         FoodListTable.removeColumn(FoodListTable.getColumnModel().getColumn(3));
         // We remove the column from the view, but it still stays in the model,
         // so we can access it in the food editor tab.
-        FoodListTable.setRowSelectionInterval(0, 0); // We select the first row
-        // by default.
+        FoodListTable.getSelectionModel().addListSelectionListener(
+                new FoodListSelectionHandler());
+        FoodListTable.changeSelection(0, 0, false, false); // We select the
+        // first row by default.
+        loadEditorEntry(0); // We manually load the editor entry for the first
+        // row, because if we fake the selection of the first row, it doesn't
+        // fire the list selection event.
     }
 
     /**
@@ -83,7 +118,7 @@ public class MainWindow extends javax.swing.JFrame {
         FoodListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 { new Integer(1), "Cookie", "chomp chomp", "sweet"},
-                { new Integer(2), "Cake", "chomp chomp more", "sweet, huge"},
+                { new Integer(2), "Cake", "chomp chomp more", "sweet,huge"},
                 { new Integer(3), "Water", "H20", "drink"},
                 { new Integer(4), "beef steak", "bos taurus taurus", "source beef"},
                 { new Integer(5), "pork steak", "sus scrofa f. domestica", "source pork"}
@@ -119,11 +154,21 @@ public class MainWindow extends javax.swing.JFrame {
         NewFoodButton.setText("Create new food product");
         NewFoodButton.setToolTipText("Opens the food editor tab with a new food product.");
         NewFoodButton.setName("newFoodButton"); // NOI18N
+        NewFoodButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewFoodButtonActionPerformed(evt);
+            }
+        });
         FoodListButtonsPanel.add(NewFoodButton);
 
         EditFoodButton.setText("Edit selected food product");
         EditFoodButton.setToolTipText("Opens the food editor tab with the selected food product.");
         EditFoodButton.setName("editFoodButton"); // NOI18N
+        EditFoodButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditFoodButtonActionPerformed(evt);
+            }
+        });
         FoodListButtonsPanel.add(EditFoodButton);
 
         DeleteFoodButton.setText("Delete food product");
@@ -143,7 +188,8 @@ public class MainWindow extends javax.swing.JFrame {
         FoodEditPanel.setName("FoodEditPanel"); // NOI18N
 
         FoodProductIDTextFieldLabel.setLabelFor(FoodProductIDTextField);
-        FoodProductIDTextFieldLabel.setText("Food procut ID:");
+        FoodProductIDTextFieldLabel.setText("Food product ID:");
+        FoodProductIDTextFieldLabel.setToolTipText("");
         FoodProductIDTextFieldLabel.setName("foodProductIDTextFieldLabel"); // NOI18N
 
         FoodProductIDTextField.setName("foodProductIDTextField"); // NOI18N
@@ -166,6 +212,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         FoodProductTagsListScrollPane.setName("foodProductTagsListScrollPane"); // NOI18N
 
+        FoodProductTagsList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "sweet", "huge", "drink", "source beef", "source pork", "sour" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         FoodProductTagsList.setName("foodProductTagsList"); // NOI18N
         FoodProductTagsListScrollPane.setViewportView(FoodProductTagsList);
 
@@ -221,12 +272,63 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DeleteFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteFoodButtonActionPerformed
-        int selectedRow = FoodListTable.getSelectedRow();
-        if (selectedRow != -1) {
-            ((DefaultTableModel)FoodListTable.getModel()).removeRow(selectedRow);
+        int selectedRowIndex = FoodListTable.getSelectedRow();
+        if (selectedRowIndex != -1) {
+            ((DefaultTableModel)FoodListTable.getModel())
+                    .removeRow(selectedRowIndex);
+            if (FoodListTable.getRowCount() == 0) {
+                FoodProductIDTextField.setText("");
+                FoodProductNameTextField.setText("");
+                FoodProductScientificNameTextField.setText("");
+                FoodProductTagsList.clearSelection();
+            } else {
+                FoodListTable.changeSelection(0, 0, false, false);
+                loadEditorEntry(0);
+            }
         }
     }//GEN-LAST:event_DeleteFoodButtonActionPerformed
 
+    private void EditFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditFoodButtonActionPerformed
+        MainTabbedPane.setSelectedComponent(FoodEditPanel);
+    }//GEN-LAST:event_EditFoodButtonActionPerformed
+
+    private void NewFoodButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFoodButtonActionPerformed
+        int newRowIndex = FoodListTable.getRowCount();
+        ((DefaultTableModel)FoodListTable.getModel()).addRow(
+                new Vector(Arrays.asList(new Object[]{null, "", "", ""})));
+        FoodListTable.changeSelection(newRowIndex, newRowIndex, false, false);
+        loadEditorEntry(newRowIndex);
+    }//GEN-LAST:event_NewFoodButtonActionPerformed
+
+    /**
+     * Loads an entry to the editor tab.
+     * 
+     * @param selectionIndex The entry index in the list.
+     */
+    private void loadEditorEntry(int selectionIndex) {
+        Vector selectedRow = (Vector)((DefaultTableModel)
+                FoodListTable.getModel()).getDataVector()
+                .elementAt(selectionIndex);
+        Object foodID = selectedRow.elementAt(FOOD_ID_COLUMN_NUMBER);
+        FoodProductIDTextField.setText(foodID == null
+                                       ? ""
+                                       : Integer.toString((Integer)foodID));
+        FoodProductNameTextField.setText((String)selectedRow
+                .elementAt(FOOD_NAME_COLUMN_NUMBER));
+        FoodProductScientificNameTextField.setText((String)selectedRow
+                .elementAt(FOOD_SCIENTIFIC_NAME_COLUMN_NUMBER));
+        String [] tags = ((String)selectedRow
+                .elementAt(FOOD_TAGS_COLUMN_NUMBER)).split(",");
+        FoodProductTagsList.clearSelection();
+        for (int i = 0; i < FoodProductTagsList.getModel().getSize(); i++) {
+            for (String t: tags) {
+                if (t.equals(FoodProductTagsList.getModel().getElementAt(i))) {
+                    FoodProductTagsList.addSelectionInterval(i, i);
+                }
+            }
+        }
+    }
+    
     /**
      * The main method, launching the GUI.
      */
