@@ -32,6 +32,7 @@
     <Container class="javax.swing.JTabbedPane" name="MainTabbedPane">
       <Properties>
         <Property name="tabPlacement" type="int" value="4"/>
+        <Property name="toolTipText" type="java.lang.String" value="Tabs switcher with food list and food editor tabs."/>
         <Property name="name" type="java.lang.String" value="mainTabbedPane" noResource="true"/>
       </Properties>
       <Constraints>
@@ -106,6 +107,7 @@
                         </Column>
                       </Table>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="List of the food products."/>
                     <Property name="name" type="java.lang.String" value="foodListTable" noResource="true"/>
                     <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                       <JTableSelectionModel selectionMode="0"/>
@@ -245,6 +247,7 @@
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="0" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Food product ID."/>
                 <Property name="name" type="java.lang.String" value="foodProductIDSpinner" noResource="true"/>
               </Properties>
             </Component>
@@ -259,6 +262,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="FoodProductNameTextField">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Food product name."/>
                 <Property name="name" type="java.lang.String" value="foodProductNameTextField" noResource="true"/>
               </Properties>
               <Events>
@@ -276,6 +280,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="FoodProductScientificNameTextField">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Food product scientific name."/>
                 <Property name="name" type="java.lang.String" value="foodProductScientificNameTextField" noResource="true"/>
               </Properties>
               <Events>
@@ -313,6 +318,7 @@
                         <StringItem index="5" value="sour"/>
                       </StringArray>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Food product tags."/>
                     <Property name="name" type="java.lang.String" value="foodProductTagsList" noResource="true"/>
                   </Properties>
                   <Events>

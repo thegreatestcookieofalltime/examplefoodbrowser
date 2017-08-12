@@ -138,6 +138,7 @@ public class MainWindow extends javax.swing.JFrame {
         setResizable(false);
 
         MainTabbedPane.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+        MainTabbedPane.setToolTipText("Tabs switcher with food list and food editor tabs.");
         MainTabbedPane.setName("mainTabbedPane"); // NOI18N
 
         FoodListPanel.setName("FoodListPanel"); // NOI18N
@@ -172,6 +173,7 @@ public class MainWindow extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        FoodListTable.setToolTipText("List of the food products.");
         FoodListTable.setName("foodListTable"); // NOI18N
         FoodListTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         FoodListTableScrollPane.setViewportView(FoodListTable);
@@ -223,12 +225,14 @@ public class MainWindow extends javax.swing.JFrame {
         FoodProductIDFormattedTextFieldLabel.setName("foodProductIDFormattedTextFieldLabel"); // NOI18N
 
         FoodProductIDSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        FoodProductIDSpinner.setToolTipText("Food product ID.");
         FoodProductIDSpinner.setName("foodProductIDSpinner"); // NOI18N
 
         FoodProductNameTextFieldLabel.setLabelFor(FoodProductNameTextField);
         FoodProductNameTextFieldLabel.setText("Food product name:");
         FoodProductNameTextFieldLabel.setName("foodProductNameTextFieldLabel"); // NOI18N
 
+        FoodProductNameTextField.setToolTipText("Food product name.");
         FoodProductNameTextField.setName("foodProductNameTextField"); // NOI18N
         FoodProductNameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -240,6 +244,7 @@ public class MainWindow extends javax.swing.JFrame {
         FoodProductScientificNameTextFieldLabel.setText("Food product scientific name:");
         FoodProductScientificNameTextFieldLabel.setName("foodProductScientificNameTextFieldLabel"); // NOI18N
 
+        FoodProductScientificNameTextField.setToolTipText("Food product scientific name.");
         FoodProductScientificNameTextField.setName("foodProductScientificNameTextField"); // NOI18N
         FoodProductScientificNameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -258,6 +263,7 @@ public class MainWindow extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        FoodProductTagsList.setToolTipText("Food product tags.");
         FoodProductTagsList.setName("foodProductTagsList"); // NOI18N
         FoodProductTagsList.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
